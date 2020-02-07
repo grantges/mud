@@ -1,9 +1,5 @@
-
 import Character from "./Character";
-
-
-class Goblin extends Character {
-
+export class Goblin extends Character {
     constructor(props?:any){
         super(props);
 
@@ -12,9 +8,5 @@ class Goblin extends Character {
         this.speed      = 30;
 
     }
-
 }
 
-export {
-    Goblin
-}
