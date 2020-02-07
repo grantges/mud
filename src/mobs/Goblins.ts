@@ -2,7 +2,7 @@
 import Character from "./Character";
 
 
-export default class Goblin extends Character {
+class Goblin extends Character {
 
     constructor(props?:any){
         super(props);
@@ -13,4 +13,8 @@ export default class Goblin extends Character {
 
     }
 
+}
+
+export {
+    Goblin
 }

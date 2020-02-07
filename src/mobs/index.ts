@@ -1,4 +1,4 @@
 import Character from "./Character";
-import Goblin from "./Goblin";
+import * as Goblins from "./Goblins";
 
-export {Character, Goblin};
+export {Character, Goblins};

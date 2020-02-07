@@ -1,6 +1,8 @@
 
 import { IAbilities, ISkills } from '../entities/types';
-import random from 'math-random';
+import {Weapons} from '../items';
+import _ from 'lodash';
+import randomInt from 'random-int';
 import { ifError } from "assert";
 
 
@@ -58,7 +60,9 @@ export default class Character {
     public isStunned         : boolean;
 
     /** Inventory **/
-    protected items          : any[];
+    protected items            : any[];
+    protected equipedWeapon    : Weapons.Weapon;
+    protected equipedArmor     : any[];
 
     constructor(props?:any) {
         if(props) {
@@ -70,21 +74,22 @@ export default class Character {
     }
 
     private roll = ():void => {
-        this.wisdom = Math.round(random()*8) + 8;
-        this.wisdom = Math.round(random()*8) + 8;
-        this.wisdom = Math.round(random()*8) + 8;
-        this.wisdom = Math.round(random()*8) + 8;
-        this.charisma = Math.round(random()*8) + 8;
-        this.strength = Math.round(random()*8) + 8;
-        this.dexterity = Math.round(random()*8) + 8;
-        this.constitution = Math.round(random()*8) + 8;
-        this.intelligence = Math.round(random()*8 ) + 8;    
-        
-        console.log(this.stats());
+        this.wisdom = randomInt(8,20);
+        this.charisma = randomInt(8,20);
+        this.strength = randomInt(8,20);
+        this.dexterity = randomInt(8,20);
+        this.constitution = randomInt(8,20);
+        this.intelligence = randomInt(8,20); 
+
+        this.applyRacialTraits();
     }
 
     private applyRacialTraits = ():void => {
 
+    }
+
+    private applyItemStats = ():void => {
+       // this.armorClass = 
     }
 
     public stats = () => {
@@ -103,7 +108,7 @@ export default class Character {
         return self.constructor.name;
     }
 
-    takeDamage = (damage: number):void => {
+    public takeDamage = (damage: number):void => {
         
         if(!this.isUnconscious && !this.isDead) {
             //console.log(this.name + " takes " + damage + " points of damage");
@@ -112,23 +117,41 @@ export default class Character {
             if(this.hitPoints <= 0){
                 this.hitPoints = 0;
                 this.isDead = true;
-                
-                console.log(this.name || this.race() + " is dead!");
+                console.log( (this.name || "The "+this.race()) + " is dead!");
             }
         }
 
     }
 
-    attack = (atk: number, character: Character):void => {
+    public attack = (character: Character):void => {
+
+        console.log(this.equipedWeapon.getDamage);
         
         if(!this.isUnconscious && !this.isDead) {
-            
             let atackee = character.name || ("a " + character.race());
-
-            console.log((this.name || this.race()) + " attacks " + atackee + " for " + atk + " points of damnage." );
+            let atk = this.equipedWeapon.getDamage();
             character.takeDamage(atk);
+            console.log((this.name || "A "+this.race()) + " attacks " + atackee + " for " + atk + " points of damnage." );
         }
 
+    }
+
+    public equipWeapon = (item: any):void => {
+        this.equipedWeapon = item;
+    }
+
+    public equipArmor = (item: any):void => {
+
+    }
+
+    public addItemToInventory = (item: any):void => {
+        this.items.push(item);
+    }
+
+    public removeItemFromInventory = (name: string):void => {
+        _.remove(this.items, function(item){
+            return item.name = name;
+        });
     }
 
 }
